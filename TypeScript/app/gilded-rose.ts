@@ -35,6 +35,7 @@ export class GildedRose {
         if (item.sellIn < 0) {
           this.increaseQualityByOne(item);
         }
+        continue;
       } else {
         if (!isBackstagePassToTAFKAL80ETC) {
           this.decreaseQualityByOne(item);
