@@ -18,52 +18,89 @@ export class GildedRose {
   }
 
   updateQuality() {
-    for (let i = 0; i < this.items.length; i++) {
-      if (this.items[i].name != 'Aged Brie' && this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert') {
-        if (this.items[i].quality > 0) {
-          if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-            this.items[i].quality = this.items[i].quality - 1
+    const amountOfItems = this.items.length;
+
+    // Loop through all items
+    for (let i = 0; i < amountOfItems; i++) {
+      const item = this.items[i];
+      const name = item.name;
+
+      // Is item is not Aged Brie and Backstage passes to a TAFKAL80ETC concert
+      if (
+        name != "Aged Brie" &&
+        name != "Backstage passes to a TAFKAL80ETC concert"
+      ) {
+        // Is quality is greater than 0
+        if (item.quality > 0) {
+          // Is item is not Sulfuras, Hand of Ragnaros
+          if (name != "Sulfuras, Hand of Ragnaros") {
+            this.decreaseQualityByOne(item);
           }
         }
       } else {
-        if (this.items[i].quality < 50) {
-          this.items[i].quality = this.items[i].quality + 1
-          if (this.items[i].name == 'Backstage passes to a TAFKAL80ETC concert') {
-            if (this.items[i].sellIn < 11) {
-              if (this.items[i].quality < 50) {
-                this.items[i].quality = this.items[i].quality + 1
+        // Is quality is less than 50
+        if (item.quality < 50) {
+          this.increaseQualityByOne(item);
+          // Is item is Backstage passes to a TAFKAL80ETC concert
+          if (name == "Backstage passes to a TAFKAL80ETC concert") {
+            // Is sellIn is less than 11
+            if (item.sellIn < 11) {
+              // Is quality is less than 50
+              if (item.quality < 50) {
+                this.increaseQualityByOne(item);
               }
             }
-            if (this.items[i].sellIn < 6) {
-              if (this.items[i].quality < 50) {
-                this.items[i].quality = this.items[i].quality + 1
+            // Is sellIn is less than 6
+            if (item.sellIn < 6) {
+              // Is quality is less than 50
+              if (item.quality < 50) {
+                this.increaseQualityByOne(item);
               }
             }
           }
         }
       }
-      if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-        this.items[i].sellIn = this.items[i].sellIn - 1;
+      // Is item is not Sulfuras, Hand of Ragnaros
+      if (name != "Sulfuras, Hand of Ragnaros") {
+        // Decrease sellIn by 1
+        item.sellIn = item.sellIn - 1;
       }
-      if (this.items[i].sellIn < 0) {
-        if (this.items[i].name != 'Aged Brie') {
-          if (this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert') {
-            if (this.items[i].quality > 0) {
-              if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-                this.items[i].quality = this.items[i].quality - 1
+      // Is sellIn is less than 0
+      if (item.sellIn < 0) {
+        // Is item is not Aged Brie
+        if (name != "Aged Brie") {
+          // Is item is not Backstage passes to a TAFKAL80ETC concert
+          if (name != "Backstage passes to a TAFKAL80ETC concert") {
+            // Is quality is greater than 0
+            if (item.quality > 0) {
+              // Is item is not Sulfuras, Hand of Ragnaros
+              if (name != "Sulfuras, Hand of Ragnaros") {
+                this.decreaseQualityByOne(item);
               }
             }
           } else {
-            this.items[i].quality = this.items[i].quality - this.items[i].quality
+            // Set quality to 0
+            item.quality = item.quality - item.quality;
           }
         } else {
-          if (this.items[i].quality < 50) {
-            this.items[i].quality = this.items[i].quality + 1
+          // Is quality is less than 50
+          if (item.quality < 50) {
+            this.increaseQualityByOne(item);
           }
         }
       }
     }
 
     return this.items;
+  }
+
+  // Increase quality by 1
+  increaseQualityByOne(item: Item) {
+    item.quality = item.quality + 1;
+  }
+
+  // Decrease quality by 1
+  decreaseQualityByOne(item: Item) {
+    item.quality = item.quality - 1;
   }
 }
