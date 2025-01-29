@@ -29,15 +29,17 @@ export class GildedRose {
 
       if (isLegendary) continue;
 
-      // Before decreasing sellIn
-      if (!isAgedBrie && !isBackstagePassToTAFKAL80ETC) {
-        // Is quality is greater than 0
-        this.decreaseQualityByOne(item);
-      } else {
-        // Handle backstage passes cases AND Aged Brie
+      if (isAgedBrie) {
         this.increaseQualityByOne(item);
-
-        if (isBackstagePassToTAFKAL80ETC) {
+        this.decreaseSellInByOne(item);
+        if (item.sellIn < 0) {
+          this.increaseQualityByOne(item);
+        }
+      } else {
+        if (!isBackstagePassToTAFKAL80ETC) {
+          this.decreaseQualityByOne(item);
+        } else {
+          this.increaseQualityByOne(item);
           // If sellIn is less than 11
           if (item.sellIn < 11) {
             this.increaseQualityByOne(item);
@@ -47,16 +49,12 @@ export class GildedRose {
             this.increaseQualityByOne(item);
           }
         }
+        this.decreaseSellInByOne(item);
       }
-
-      // Decrease sellIn by 1
-      this.decreaseSellInByOne(item);
 
       // Is sellIn is less than 0
       if (item.sellIn < 0) {
-        if (isAgedBrie) {
-          this.increaseQualityByOne(item);
-        } else if (isBackstagePassToTAFKAL80ETC) {
+        if (isBackstagePassToTAFKAL80ETC) {
           item.quality = 0;
         } else {
           this.decreaseQualityByOne(item);
