@@ -18,22 +18,20 @@ export class GildedRose {
   }
 
   updateQuality() {
-    const amountOfItems = this.items.length;
-
     // Loop through all items
-    for (let i = 0; i < amountOfItems; i++) {
-      const item = this.items[i];
+    for (const item of this.items) {
       const name = item.name;
+      const isAgedBrie = name.match("Aged Brie");
+      const isBackstagePassToTAFKAL80ETC = name.match(
+        "Backstage passes to a TAFKAL80ETC concert"
+      );
+      const isSulfuras = name.match("Sulfuras, Hand of Ragnaros");
 
-      // Is item is not Aged Brie and Backstage passes to a TAFKAL80ETC concert
-      if (
-        name != "Aged Brie" &&
-        name != "Backstage passes to a TAFKAL80ETC concert"
-      ) {
+      if (!isAgedBrie && !isBackstagePassToTAFKAL80ETC) {
         // Is quality is greater than 0
         if (item.quality > 0) {
           // Is item is not Sulfuras, Hand of Ragnaros
-          if (name != "Sulfuras, Hand of Ragnaros") {
+          if (!isSulfuras) {
             this.decreaseQualityByOne(item);
           }
         }
@@ -41,8 +39,7 @@ export class GildedRose {
         // Is quality is less than 50
         if (item.quality < 50) {
           this.increaseQualityByOne(item);
-          // Is item is Backstage passes to a TAFKAL80ETC concert
-          if (name == "Backstage passes to a TAFKAL80ETC concert") {
+          if (isBackstagePassToTAFKAL80ETC) {
             // Is sellIn is less than 11
             if (item.sellIn < 11) {
               // Is quality is less than 50
@@ -61,26 +58,24 @@ export class GildedRose {
         }
       }
       // Is item is not Sulfuras, Hand of Ragnaros
-      if (name != "Sulfuras, Hand of Ragnaros") {
+      if (!isSulfuras) {
         // Decrease sellIn by 1
         item.sellIn = item.sellIn - 1;
       }
       // Is sellIn is less than 0
       if (item.sellIn < 0) {
-        // Is item is not Aged Brie
-        if (name != "Aged Brie") {
-          // Is item is not Backstage passes to a TAFKAL80ETC concert
-          if (name != "Backstage passes to a TAFKAL80ETC concert") {
+        if (!isAgedBrie) {
+          if (!isBackstagePassToTAFKAL80ETC) {
             // Is quality is greater than 0
             if (item.quality > 0) {
               // Is item is not Sulfuras, Hand of Ragnaros
-              if (name != "Sulfuras, Hand of Ragnaros") {
+              if (!isSulfuras) {
                 this.decreaseQualityByOne(item);
               }
             }
           } else {
             // Set quality to 0
-            item.quality = item.quality - item.quality;
+            item.quality = 0;
           }
         } else {
           // Is quality is less than 50
