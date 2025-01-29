@@ -1,3 +1,5 @@
+import { ITEM_NAMES } from "./itemConstants";
+
 export class Item {
   name: string;
   sellIn: number;
@@ -17,29 +19,21 @@ export class GildedRose {
     this.items = items;
   }
 
+  // Updates the quality based on the item name
   updateQuality() {
-    const { items } = this;
+    for (const item of this.items) {
+      if (item.name == ITEM_NAMES.LEGENDARY_ITEM) continue;
 
-    for (const item of items) {
-      const name = item.name;
-      const isAgedBrie = name.match("Aged Brie");
-      const isBackstagePass = name.match(
-        "Backstage passes to a TAFKAL80ETC concert"
-      );
-      const isLegendary = name.match("Sulfuras, Hand of Ragnaros");
-
-      if (isLegendary) continue;
-
-      if (isAgedBrie) {
+      if (item.name == ITEM_NAMES.AGED_BRIE) {
         this.handleAgedBrie(item);
-      } else if (isBackstagePass) {
+      } else if (item.name == ITEM_NAMES.BACKSTAGE_PASS) {
         this.handleBackstagePass(item);
       } else {
         this.handleRegularItem(item);
       }
     }
 
-    return items;
+    return this.items;
   }
 
   // "Aged Brie" items increase in quality by 1 daily, and by 2 if the sellIn value is below 0.
