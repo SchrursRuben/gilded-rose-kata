@@ -18,8 +18,15 @@ export class GildedRose {
   }
 
   updateQuality() {
+    const {
+      increaseQualityByOne,
+      decreaseQualityByOne,
+      decreaseSellInByOne,
+      items,
+    } = this;
+
     // Loop through all items
-    for (const item of this.items) {
+    for (const item of items) {
       const name = item.name;
       const isAgedBrie = name.match("Aged Brie");
       const isBackstagePassToTAFKAL80ETC = name.match(
@@ -30,40 +37,35 @@ export class GildedRose {
       if (isLegendary) continue;
 
       if (isAgedBrie) {
-        this.increaseQualityByOne(item);
-        this.decreaseSellInByOne(item);
+        increaseQualityByOne(item);
+        decreaseSellInByOne(item);
         if (item.sellIn < 0) {
-          this.increaseQualityByOne(item);
+          increaseQualityByOne(item);
         }
-        continue;
-      } else {
-        if (!isBackstagePassToTAFKAL80ETC) {
-          this.decreaseQualityByOne(item);
-        } else {
-          this.increaseQualityByOne(item);
-          // If sellIn is less than 11
-          if (item.sellIn < 11) {
-            this.increaseQualityByOne(item);
-          }
-          // If sellIn is less than 6
-          if (item.sellIn < 6) {
-            this.increaseQualityByOne(item);
-          }
+      } else if (isBackstagePassToTAFKAL80ETC) {
+        increaseQualityByOne(item);
+        if (item.sellIn < 11) {
+          increaseQualityByOne(item);
         }
-        this.decreaseSellInByOne(item);
-      }
+        if (item.sellIn < 6) {
+          increaseQualityByOne(item);
+        }
 
-      // Is sellIn is less than 0
-      if (item.sellIn < 0) {
-        if (isBackstagePassToTAFKAL80ETC) {
+        decreaseSellInByOne(item);
+
+        if (item.sellIn < 0) {
           item.quality = 0;
-        } else {
-          this.decreaseQualityByOne(item);
+        }
+      } else {
+        decreaseQualityByOne(item);
+        decreaseSellInByOne(item);
+        if (item.sellIn < 0) {
+          decreaseQualityByOne(item);
         }
       }
     }
 
-    return this.items;
+    return items;
   }
 
   increaseQualityByOne(item: Item) {
